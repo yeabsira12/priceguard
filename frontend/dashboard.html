@@ -1,6 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    // Toast Notification System
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+            <span>${message}</span>
+        </div>
+    `;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// Loading Button State
+function setButtonLoading(button, isLoading) {
+    if (isLoading) {
+        button.classList.add('btn-loading');
+        button.disabled = true;
+        const originalText = button.innerHTML;
+        button.setAttribute('data-original-text', originalText);
+        button.innerHTML = '<span style="opacity:0.7">Processing...</span>';
+    } else {
+        button.classList.remove('btn-loading');
+        button.disabled = false;
+        const originalText = button.getAttribute('data-original-text');
+        if (originalText) button.innerHTML = originalText;
+    }
+}
+
+// Update saveSubscription function with loading
+async function saveSubscription() {
+    const saveBtn = document.querySelector('.btn-save');
+    setButtonLoading(saveBtn, true);
+    
+    const id = document.getElementById('subscriptionId').value;
+    const name = document.getElementById('subName').value;
+    const price = document.getElementById('subPrice').value;
+    const category = document.getElementById('subCategory').value;
+    const billing_date = document.getElementById('subBillingDate').value;
+    
+    if (!name || !price || !billing_date) {
+        showToast('Please fill all fields', 'error');
+        setButtonLoading(saveBtn, false);
+        return;
+    }
+    
+    const url = id ? `${API_URL}/subscriptions/${id}` : `${API_URL}/subscriptions`;
+    const method = id ? 'PUT' : 'POST';
+    
+    try {
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ name, price, category, billing_date })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            closeModal();
+            loadDashboard();
+            loadSubscriptions();
+            showToast(id ? 'Subscription updated!' : 'Subscription added!', 'success');
+        } else {
+            showToast(data.message || 'Error saving subscription', 'error');
+        }
+    } catch (error) {
+        showToast('Error connecting to server', 'error');
+    } finally {
+        setButtonLoading(saveBtn, false);
+    }
+}
+
+// Update deleteSubscription function with toast
+async function deleteSubscription(id) {
+    if (!confirm('Are you sure you want to delete this subscription?')) return;
+    
+    const deleteBtn = event.target;
+    setButtonLoading(deleteBtn, true);
+    
+    try {
+        const response = await fetch(`${API_URL}/subscriptions/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            loadDashboard();
+            loadSubscriptions();
+            showToast('Subscription deleted!', 'success');
+        } else {
+            showToast(data.message || 'Error deleting subscription', 'error');
+        }
+    } catch (error) {
+        showToast('Error connecting to server', 'error');
+    } finally {
+        setButtonLoading(deleteBtn, false);
+    }
+}
+
+// Add loading state to login and register
+// Update login form in login.html
+document.getElementById('loginForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const loginBtn = document.querySelector('.btn-login');
+    setButtonLoading(loginBtn, true);
+    
+    // ... rest of your login code
+    // Add showToast for success/error
+}
+
+// Update register form in register.html
+document.getElementById('registerForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const registerBtn = document.querySelector('.btn-register');
+    setButtonLoading(registerBtn, true);
+    
+    // ... rest of your register code
+    // Add showToast for success/error
+}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - PriceGuard</title>
