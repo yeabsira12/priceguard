@@ -242,6 +242,13 @@ npm install
 - HTML5, CSS3, JavaScript
 - Chart.js for data visualization
 - Responsive CSS Grid/Flexbox
+ 🔐 Security Features
+
+- JWT Authentication - Every request requires a valid token
+- Password Hashing - Passwords stored with bcrypt (10 salt rounds)
+- Protected Routes - Users can only access their own data
+- SQL Injection Protection - Parameterized queries throughout
+- Environment Variables - No hardcoded secrets in code
 
  🚀 Live Demo
 
