@@ -23,9 +23,8 @@ A full-stack web application to track and manage monthly subscriptions with real
 - Chart.js for data visualization
 - Responsive CSS Grid/Flexbox
 
- 🚀 Live Demo
-
-[Coming Soon]
+Try it live   
+https://dashboard.render.com/static/srv-d7njneqqqhas73ftqod0
 
  📋 Installation
 
