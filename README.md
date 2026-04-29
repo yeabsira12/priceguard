@@ -24,8 +24,7 @@ A full-stack web application to track and manage monthly subscriptions with real
 - Responsive CSS Grid/Flexbox
 
 Try it live   
-https://dashboard.render.com/static/srv-d7njneqqqhas73ftqod0
-
+https://priceguard-frontend.onrender.com
  📋 Installation
 
 1. Clone the repository
