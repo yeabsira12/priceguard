@@ -30,4 +30,4 @@ https://dashboard.render.com/static/srv-d7njneqqqhas73ftqod0
 
 1. Clone the repository
 ```bash
-git clone https://github.com/YOUR_USERNAME/priceguard.git
+git clone https://github.com/yeabsira12/priceguard.git
